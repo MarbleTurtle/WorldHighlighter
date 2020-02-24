@@ -91,14 +91,16 @@ public class HighlightPlugin extends Plugin
 	}
 
 	private void highlight(String playerName) {
-		boolean clan=false;
-		for(int c=0; c!=this.client.getClanMemberManager().getMembers().length; c++){
-			if(this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)){
-				clan=true;
-				world=this.client.getClanMemberManager().getMembers()[c].getWorld();
+		boolean clan = false;
+		if(this.client.getClanMemberManager()!=null) {
+		for (int c = 0; c != this.client.getClanMemberManager().getMembers().length; c++) {
+			if (this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)) {
+				clan = true;
+				world = this.client.getClanMemberManager().getMembers()[c].getWorld();
 				break;
 			}
 		}
+	}
 		if(!clan){
 			for(int f=0; f!=this.client.getFriendContainer().getCount();f++){
 				if(this.client.getFriendContainer().getMembers()[f].getName().equals(playerName)){

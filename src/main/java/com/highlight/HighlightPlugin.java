@@ -37,7 +37,8 @@ public class HighlightPlugin extends Plugin
 	private static final Color HIGHLIGHT_HOVER_BORDER_COLOR;
 	private static final Color HIGHLIGHT_FILL_COLOR;
 	private int world;
-	private boolean open;
+	private String player;
+	private boolean clan;
 	@Inject
 	private Client client;
 	@Inject
@@ -91,30 +92,38 @@ public class HighlightPlugin extends Plugin
 	}
 
 	private void highlight(String playerName) {
-		boolean clan = false;
+		clan = false;
 		if(this.client.getClanMemberManager()!=null) {
-		for (int c = 0; c != this.client.getClanMemberManager().getMembers().length; c++) {
-			if (this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)) {
-				clan = true;
-				world = this.client.getClanMemberManager().getMembers()[c].getWorld();
-				break;
+			for (int c = 0; c != this.client.getClanMemberManager().getMembers().length; c++) {
+				if (this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)) {
+					clan = true;
+					player = Text.toJagexName(this.client.getClanMemberManager().getMembers()[c].getName());
+					world = this.client.getClanMemberManager().getMembers()[c].getWorld();
+					if(world==this.client.getWorld()){
+						sendNotification(2);
+						this.resetWorld();
+					}else {
+						sendNotification(4);
+					}
+					break;
+				}
 			}
 		}
-	}
 		if(!clan){
 			for(int f=0; f!=this.client.getFriendContainer().getCount();f++){
 				if(this.client.getFriendContainer().getMembers()[f].getName().equals(playerName)){
 					world=this.client.getFriendContainer().getMembers()[f].getWorld();
+					if(world==this.client.getWorld()){
+						sendNotification(2);
+						this.resetWorld();
+					}else{
+						sendNotification(1);
+					}
 				}
 			}
 		}
-		if(world==this.client.getWorld()){
-			sendNotification(2);
-			this.resetWorld();
-		}else if(world==0){
+		if(world==0){
 			sendNotification(3);
-		}else{
-			sendNotification(1);
 		}
 	}
 
@@ -175,8 +184,12 @@ public class HighlightPlugin extends Plugin
 			stringBuilder.append("Player is on your world.");
 			String notification = stringBuilder.toString();
 			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
-		}else{
+		}else if(type==3){
 			stringBuilder.append("Unable to find world, player is neither in clan chat nor on friends list.");
+			String notification = stringBuilder.toString();
+			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
+		}else{
+			stringBuilder.append("Highlighting "+player+" in clan chat.");
 			String notification = stringBuilder.toString();
 			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
 		}
@@ -190,6 +203,10 @@ public class HighlightPlugin extends Plugin
 
 	public int getWorld() {return this.world;}
 	public void resetWorld() {this.world=0;}
+	public String getPlayer() {return this.player;}
+	public void resetPlayer() {this.player="";}
+	public boolean getClan() {return this.clan;}
+	public void resetClan() {this.clan=false;}
 
 	static {
 		HIGHLIGHT_BORDER_COLOR = Color.ORANGE;

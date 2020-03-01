@@ -16,4 +16,14 @@ public interface HighlightConfig extends Config
 	{
 		return true;
 	}
+	@ConfigItem(
+			keyName = "highlightClan",
+			name = "Highlight clan member",
+			description = "Attempts to highlight the clan member instead of the world, if it fails will default to world."
+	)
+	default boolean clanFirst()
+	{
+		return true;
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.highlight;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ObjectArrays;
@@ -97,7 +98,7 @@ public class HighlightPlugin extends Plugin
 			for (int c = 0; c != this.client.getClanMemberManager().getMembers().length; c++) {
 				if (this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)) {
 					clan = true;
-					player = Text.toJagexName(this.client.getClanMemberManager().getMembers()[c].getName());
+					player = toTrueName(this.client.getClanMemberManager().getMembers()[c].getName());
 					world = this.client.getClanMemberManager().getMembers()[c].getWorld();
 					if(world==this.client.getWorld()){
 						sendNotification(2);
@@ -112,6 +113,7 @@ public class HighlightPlugin extends Plugin
 		if(!clan){
 			for(int f=0; f!=this.client.getFriendContainer().getCount();f++){
 				if(this.client.getFriendContainer().getMembers()[f].getName().equals(playerName)){
+					player = toTrueName(this.client.getFriendContainer().getMembers()[f].getName());
 					world=this.client.getFriendContainer().getMembers()[f].getWorld();
 					if(world==this.client.getWorld()){
 						sendNotification(2);
@@ -206,11 +208,14 @@ public class HighlightPlugin extends Plugin
 	public String getPlayer() {return this.player;}
 	public void resetPlayer() {this.player="";}
 	public boolean getClan() {return this.clan;}
-	public void resetClan() {this.clan=false;}
 
 	static {
 		HIGHLIGHT_BORDER_COLOR = Color.ORANGE;
 		HIGHLIGHT_HOVER_BORDER_COLOR = HIGHLIGHT_BORDER_COLOR.darker();
 		HIGHLIGHT_FILL_COLOR = new Color(0, 255, 0, 20);
+	}
+	private String toTrueName(String str)
+	{
+		return CharMatcher.ascii().retainFrom(str.replace('\u00A0', ' ')).trim();
 	}
 }

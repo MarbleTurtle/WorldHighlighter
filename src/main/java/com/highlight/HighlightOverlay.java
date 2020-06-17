@@ -39,7 +39,7 @@ class HighlightOverlay extends Overlay {
                     this.hasScrolled=0;
                     return null;
                 } else {
-                    Widget clanContainer = this.client.getWidget(WidgetInfo.CLAN_CHAT_LIST);
+                    Widget clanContainer = this.client.getWidget(WidgetInfo.FRIENDS_CHAT_LIST);
                     if(clanContainer!=null&&!clanContainer.isHidden()){
                         Widget found = null;
                         Widget[] var8 = clanContainer.getDynamicChildren();
@@ -56,9 +56,9 @@ class HighlightOverlay extends Overlay {
                         }else{
                             if (this.hasScrolled != found.getRelativeY()) {
                                 this.hasScrolled = found.getRelativeY();
-                                this.plugin.scrollToWidget(this.client.getWidget(WidgetInfo.CLAN_CHAT_LIST), this.client.getWidget(7, 17), new Widget[]{found});
+                                this.plugin.scrollToWidget(this.client.getWidget(WidgetInfo.FRIENDS_CHAT_LIST), this.client.getWidget(7, 17), new Widget[]{found});
                             }
-                            this.plugin.highlightWidget(graphics, found, this.client.getWidget(WidgetInfo.CLAN_CHAT_LIST), PADDING, (String) null);
+                            this.plugin.highlightWidget(graphics, found, this.client.getWidget(WidgetInfo.FRIENDS_CHAT_LIST), PADDING, (String) null);
                             return null;
                         }
                     }else if (hasScrolled != 0) {

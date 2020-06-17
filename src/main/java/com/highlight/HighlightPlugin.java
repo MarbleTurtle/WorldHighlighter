@@ -94,17 +94,21 @@ public class HighlightPlugin extends Plugin
 
 	private void highlight(String playerName) {
 		clan = false;
-		if(this.client.getClanMemberManager()!=null) {
-			for (int c = 0; c != this.client.getClanMemberManager().getMembers().length; c++) {
-				if (this.client.getClanMemberManager().getMembers()[c].getName().equals(playerName)) {
+		if(this.client.getFriendsChatManager()!=null) {
+			for (int c = 0; c != this.client.getFriendsChatManager().getMembers().length; c++) {
+				if (this.client.getFriendsChatManager().getMembers()[c].getName().equals(playerName)) {
 					clan = true;
-					player = toTrueName(this.client.getClanMemberManager().getMembers()[c].getName());
-					world = this.client.getClanMemberManager().getMembers()[c].getWorld();
+					player = toTrueName(this.client.getFriendsChatManager().getMembers()[c].getName());
+					world = this.client.getFriendsChatManager().getMembers()[c].getWorld();
 					if(world==this.client.getWorld()){
 						sendNotification(2);
 						this.resetWorld();
-					}else {
-						sendNotification(4);
+					}else{
+						if(config.clanFirst()) {
+							sendNotification(4);
+						}else{
+							sendNotification(1);
+						}
 					}
 					break;
 				}
@@ -169,7 +173,7 @@ public class HighlightPlugin extends Plugin
 		}
 		if (nonnullCount != 0) {
 			averageCentralY /= nonnullCount;
-			int newScroll = Math.max(0, Math.min(parent.getScrollHeight(), averageCentralY - parent.getHeight() / 2));
+			int newScroll = Math.max(0, Math.min(parent.getScrollHeight(), averageCentralY - parent.getHeight() / 4));
 			this.client.runScript(new Object[]{72, scrollbar.getId(),  parent.getId(), newScroll});
 		}
 	}
@@ -187,11 +191,11 @@ public class HighlightPlugin extends Plugin
 			String notification = stringBuilder.toString();
 			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
 		}else if(type==3){
-			stringBuilder.append("Unable to find world, player is neither in clan chat nor on friends list.");
+			stringBuilder.append("Unable to find world, player is neither in friends chat nor on friends list.");
 			String notification = stringBuilder.toString();
 			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
 		}else{
-			stringBuilder.append("Highlighting "+player+" in clan chat.");
+			stringBuilder.append("Highlighting "+player+" in friends chat.");
 			String notification = stringBuilder.toString();
 			this.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", notification, "");
 		}

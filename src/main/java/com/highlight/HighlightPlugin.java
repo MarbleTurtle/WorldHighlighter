@@ -134,11 +134,12 @@ public class HighlightPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onPlayerMenuOptionClicked(PlayerMenuOptionClicked event) {
+	public void onMenuOptionClicked(MenuOptionClicked event) {
 		if (event.getMenuOption().equals("Highlight World")) {
 			this.highlight(Text.removeTags(event.getMenuTarget()));
 		}
 	}
+
 
 	void highlightWidget(Graphics2D graphics, Widget toHighlight, Widget container, Rectangle padding, String text) {
 		padding = (Rectangle) MoreObjects.firstNonNull(padding, new Rectangle());
